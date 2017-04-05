@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal">13sp</dimen>
+    <dimen name="marginLeft">73dp</dimen>
+
+    <dimen name="title_height">50dp</dimen>
+    <dimen name="title_textsize">18dp</dimen>
+    <dimen name="btn_marginLeft">13dp</dimen>
+    <dimen name="text_marginTop">14dp</dimen>
+    <dimen name="mine_left_padding">8dp</dimen>
+    <dimen name="mine_setting_height">60dp</dimen>
+    <dimen name="mine_arrow_padding">15dp</dimen>
+    <dimen name="mine_list_marginTop">15dp</dimen>
+    <dimen name="mine_header_margin">16dp</dimen>
+    <dimen name="edittext_textsize">15dp</dimen>
+</resources>

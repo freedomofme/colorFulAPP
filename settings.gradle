@@ -1,2 +1,3 @@
 include ':app', ':opencv-java', ':viewPagerIndicator_Library'
 
+include ':promptDialogmaster'
