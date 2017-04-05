@@ -59,21 +59,14 @@
             android:layout_weight="1" />
 
 
-        <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyclerView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:scrollbars="horizontal"-->
-        <!--/>-->
-
         <com.hhxfight.recolorer.widget.GroupButtonView
             android:id="@+id/gbv_quality"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            app:groupBtnCodeText="low#mind#high"
-            app:groupBtnNameText="质量低#质量中#质量高" />
+            app:groupBtnCodeText="one#two"
+            app:groupBtnNameText="一维流形#二维流形" />
     </LinearLayout>
 
     <com.victor.loading.book.BookLoading

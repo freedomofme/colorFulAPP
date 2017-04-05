@@ -1,4 +1,4 @@
-package com.hhxfight.recolorer.main.view;
+package com.hhxfight.recolorer.Activity.main.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.hhxfight.recolorer.Activity.color.ColorTransform;
+import com.hhxfight.recolorer.Activity.gray.GrayscaleActivity;
+import com.hhxfight.recolorer.Activity.manifold.ManifoldActivity;
 import com.hhxfight.recolorer.R;
 import com.hhxfight.recolorer.setting.SettingActivity;
 import com.yanzhenjie.album.Album;
@@ -89,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements IMainView{
     }
 
     public void onGray(View view) {
-        Album.startAlbum(this, 100);
-        Intent i = new Intent(this, SettingActivity.class);
+
+        Intent i = new Intent(this, GrayscaleActivity.class);
         startActivity(i);
     }
     public void onSetting(View view) {
@@ -101,8 +104,12 @@ public class MainActivity extends AppCompatActivity implements IMainView{
     }
 
     public void onManiflod(View view) {
+        Intent i = new Intent(this, ManifoldActivity.class);
+        startActivity(i);
     }
 
-    public void onransTform(View view) {
+    public void onTransform(View view) {
+        Intent i = new Intent(this, ColorTransform.class);
+        startActivity(i);
     }
 }

@@ -1,9 +1,9 @@
-package com.hhxfight.recolorer.main.presenter;
+package com.hhxfight.recolorer.Activity.main.presenter;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import com.hhxfight.recolorer.main.view.IMainView;
+import com.hhxfight.recolorer.Activity.main.view.IMainView;
 
 /**
  * Created by HHX on 2017/3/23.

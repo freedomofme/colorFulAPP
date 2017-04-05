@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.hhxfight.recolorer.main.view.MainActivity"
+    tools:context="com.hhxfight.recolorer.Activity.main.view.MainActivity"
     android:background="@color/albumWhite"
     >
     <RelativeLayout
@@ -67,7 +67,7 @@
                 android:layout_marginRight="80dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:onClick="onransTform"/>
+                android:onClick="onTransform"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

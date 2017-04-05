@@ -24,7 +24,7 @@
                 android:layout_centerInParent="true"
                 android:background="#fff"
                 android:gravity="center"
-                android:text="图像变灰"
+                android:text="图片换色"
                 android:textColor="#555"
                 android:textSize="@dimen/title_textsize" />
 
@@ -58,22 +58,33 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-
-        <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyclerView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:scrollbars="horizontal"-->
-        <!--/>-->
-
-        <com.hhxfight.recolorer.widget.GroupButtonView
-            android:id="@+id/gbv_quality"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            app:groupBtnCodeText="low#mind#high"
-            app:groupBtnNameText="质量低#质量中#质量高" />
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/mine_arrow_padding"
+            android:layout_marginRight="@dimen/mine_arrow_padding"
+            android:background="@color/gray" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="换色模板"
+            android:textSize="@dimen/text_tip"
+            android:textColor="#888"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/mine_arrow_padding"
+            android:layout_marginRight="@dimen/mine_arrow_padding"
+            android:background="@color/gray" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_color"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:scrollbars="horizontal" />
+
     </LinearLayout>
 
     <com.victor.loading.book.BookLoading

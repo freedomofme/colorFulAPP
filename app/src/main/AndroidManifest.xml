@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".main.view.MainActivity"
+            android:name=".Activity.main.view.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +33,26 @@
             android:name=".setting.SettingActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".Activity.gray.GrayscaleActivity"
+            android:label="@string/title_gray"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".Activity.color.ColorTransform"
+            android:label="@string/title_gray"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".Activity.manifold.ManifoldActivity"
+            android:label="@string/title_gray"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".Activity.mywork.MyWorkActivity"
+            android:label="@string/title_gray"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
     </application>
 
 </manifest>
