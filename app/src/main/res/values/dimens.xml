@@ -14,4 +14,5 @@
     <dimen name="mine_header_margin">16dp</dimen>
     <dimen name="edittext_textsize">15dp</dimen>
     <dimen name="text_tip">16dp</dimen>
+
 </resources>

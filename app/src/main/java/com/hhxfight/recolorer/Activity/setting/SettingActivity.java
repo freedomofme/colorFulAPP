@@ -1,5 +1,5 @@
 
-package com.hhxfight.recolorer.setting;
+package com.hhxfight.recolorer.Activity.setting;
 
 
 import android.app.Dialog;
@@ -41,6 +41,7 @@ public class SettingActivity extends BaseActivity {
 	private void initView() 
 	{
 		tv_clear_cache.setText("清理缓存" + " (" + getCacheSize(mContext) + ") ");
+
 	}
 	
 	@Override
@@ -214,6 +215,9 @@ public class SettingActivity extends BaseActivity {
 		{
 			size += accountFilesSizeByDirectory(context.getExternalCacheDir());
 		}
+
+
+		size = 12314234;
 		return String.format("%.2f", size / (1024.0 * 1024.0)) + "M";
 	}
 }

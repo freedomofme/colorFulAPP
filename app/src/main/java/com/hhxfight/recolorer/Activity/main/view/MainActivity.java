@@ -10,11 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.hhxfight.recolorer.Activity.color.ColorTransform;
+import com.hhxfight.recolorer.Activity.color.ColorTransformActivity;
 import com.hhxfight.recolorer.Activity.gray.GrayscaleActivity;
 import com.hhxfight.recolorer.Activity.manifold.ManifoldActivity;
+import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
 import com.hhxfight.recolorer.R;
-import com.hhxfight.recolorer.setting.SettingActivity;
+import com.hhxfight.recolorer.Activity.setting.SettingActivity;
 import com.yanzhenjie.album.Album;
 
 import java.util.List;
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements IMainView{
         startActivity(i);
     }
     public void onMyWork(View view) {
+        Intent i = new Intent(this, MyWorkActivity.class);
+        startActivity(i);
     }
 
     public void onManiflod(View view) {
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements IMainView{
     }
 
     public void onTransform(View view) {
-        Intent i = new Intent(this, ColorTransform.class);
+        Intent i = new Intent(this, ColorTransformActivity.class);
         startActivity(i);
     }
 }

@@ -30,7 +30,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
         <activity
-            android:name=".setting.SettingActivity"
+            android:name=".Activity.setting.SettingActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -39,7 +39,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
         <activity
-            android:name=".Activity.color.ColorTransform"
+            android:name=".Activity.color.ColorTransformActivity"
             android:label="@string/title_gray"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 

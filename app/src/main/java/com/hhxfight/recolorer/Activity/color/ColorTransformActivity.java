@@ -1,18 +1,29 @@
 package com.hhxfight.recolorer.Activity.color;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.boycy815.pinchimageview.PinchImageView;
 import com.hhxfight.recolorer.R;
-import com.hhxfight.recolorer.base.BaseActivity;
 import com.hhxfight.recolorer.util.AssetsUtil;
-import com.hhxfight.recolorer.widget.SimpleDividerItemDecoration;
+import com.shizhefei.view.indicator.FragmentListPageAdapter;
+import com.shizhefei.view.indicator.IndicatorViewPager;
+import com.shizhefei.view.indicator.ScrollIndicatorView;
+import com.shizhefei.view.indicator.slidebar.ColorBar;
+import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import com.victor.loading.book.BookLoading;
 import com.yanzhenjie.album.Album;
 
@@ -21,32 +32,45 @@ import com.yanzhenjie.album.Album;
  */
 
 
-public class ColorTransform extends BaseActivity {
+public class ColorTransformActivity extends FragmentActivity {
 
     PinchImageView bg;
     RecyclerView recyclerView;
     BookLoading bookLoading;
     final Handler myHandler = new Handler();
-    private MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color);
+        inflate = LayoutInflater.from(getBaseContext());
+
+        ScrollIndicatorView indicator = (ScrollIndicatorView) findViewById(R.id.siv_features);
+        indicator.setScrollBar(new ColorBar(this, Color.RED, 5));
+        int selectColorId = R.color.tab_top_text_2;
+        int unSelectColorId = R.color.tab_top_text_1;
+        indicator.setOnTransitionListener(new OnTransitionTextListener().setColorId(this, selectColorId, unSelectColorId));
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.vp_features);
+
+        viewPager.setOffscreenPageLimit(2);
+        IndicatorViewPager indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
+        inflate = LayoutInflater.from(getApplicationContext());
+        indicatorViewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+
 
         bg = (PinchImageView) findViewById(R.id.piv_bg);
-        recyclerView = (RecyclerView) findViewById(R.id.rv_color);
+
         Bitmap bitmap = AssetsUtil.getBitmap(this, "apple_0.png");
         bg.setImageBitmap(bitmap);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
         bookLoading.setVisibility(View.GONE);
 
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 
         myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Album.album(ColorTransform.this)
+                Album.album(ColorTransformActivity.this)
                         .requestCode(999) // 请求码，返回时onActivityResult()的第一个参数。
 //						.toolBarColor(toolbarColor) // Toolbar 颜色，默认蓝色。
 //						.statusBarColor(statusBarColor) // StatusBar 颜色，默认蓝色。
@@ -60,14 +84,13 @@ public class ColorTransform extends BaseActivity {
             }
         }, 2000);
 
-
-        adapter = new MyAdapter(this, getPicUrls());
-
+//        recyclerView = (RecyclerView) findViewById(R.id.rv_color);
+//        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+//        adapter = new MyAdapter(this, getPicUrls());
 //        useLinearLayoutManager();
-        useGridLayoutManager();
+//        useGridLayoutManager();
 //      useStaggeredGridLayoutManager();
-
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
 
     }
 
@@ -125,7 +148,48 @@ public class ColorTransform extends BaseActivity {
         controlLoading();
     }
 
-    public void toBack(View view){
+    public void toBack(View view) {
         finish();
+    }
+
+    private String[] names = {"系统预设", "用户自定义"};
+    private int size = names.length;
+    private LayoutInflater inflate;
+
+    private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
+        public MyAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public int getCount() {
+            return size;
+        }
+
+        @Override
+        public View getViewForTab(int position, View convertView, ViewGroup container) {
+            if (convertView == null) {
+                convertView = inflate.inflate(R.layout.tab_top, container, false);
+            }
+            TextView textView = (TextView) convertView;
+            textView.setText(names[position % names.length]);
+            textView.setPadding(20, 0, 20, 0);
+            return convertView;
+        }
+
+        @Override
+        public Fragment getFragmentForPage(int position) {
+            GridFeatureImageFragment featureImageFragment = new GridFeatureImageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(GridFeatureImageFragment.INTENT_INT_INDEX, position);
+            featureImageFragment.setArguments(bundle);
+            return featureImageFragment;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return FragmentListPageAdapter.POSITION_NONE;
+        }
+
     }
 }

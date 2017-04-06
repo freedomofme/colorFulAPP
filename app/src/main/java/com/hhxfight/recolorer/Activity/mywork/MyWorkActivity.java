@@ -2,82 +2,114 @@
 package com.hhxfight.recolorer.Activity.mywork;
 
 
-import android.graphics.Bitmap;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.AnyRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.boycy815.pinchimageview.PinchImageView;
+import com.hhxfight.recolorer.Activity.color.GridFeatureImageFragment;
 import com.hhxfight.recolorer.R;
-import com.hhxfight.recolorer.base.BaseActivity;
-import com.hhxfight.recolorer.util.AssetsUtil;
-import com.hhxfight.recolorer.widget.GroupButtonView;
-import com.victor.loading.book.BookLoading;
-import com.yanzhenjie.album.Album;
+import com.shizhefei.view.indicator.FragmentListPageAdapter;
+import com.shizhefei.view.indicator.IndicatorViewPager;
+import com.shizhefei.view.indicator.ScrollIndicatorView;
+import com.shizhefei.view.indicator.slidebar.ColorBar;
+import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 
 
-public class MyWorkActivity extends BaseActivity {
-    PinchImageView bg;
-    BookLoading bookLoading;
-    GroupButtonView gbv_quality;
-    //	RecyclerView recyclerView;
-    final Handler myHandler = new Handler();
-
+public class MyWorkActivity extends FragmentActivity {
+    private String[] names = {"系统模板", "我的模板", "灰色的图片", "换色的图片"};
+    private int size = names.length;
+    private LayoutInflater inflate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gray);
+        setContentView(R.layout.activity_mywork);
 
-        bg = (PinchImageView) findViewById(R.id.piv_bg);
-        bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
-        gbv_quality = (GroupButtonView) findViewById(R.id.gbv_quality);
+        inflate = LayoutInflater.from(getBaseContext());
+        ScrollIndicatorView indicator = (ScrollIndicatorView) findViewById(R.id.siv_features);
+        indicator.setScrollBar(new ColorBar(this, Color.RED, 5));
+        int selectColorId = R.color.tab_top_text_2;
+        int unSelectColorId = R.color.tab_top_text_1;
+        indicator.setOnTransitionListener(new OnTransitionTextListener().setColorId(this, selectColorId, unSelectColorId));
 
+        ViewPager viewPager = (ViewPager) findViewById(R.id.vp_features);
 
-//        recyclerView = (RecyclerView) findViewById(R.id.rl_login);
-        Bitmap bitmap = AssetsUtil.getBitmap(this, "apple_0.png");
-        bg.setImageBitmap(bitmap);
-
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Album.album(MyWorkActivity.this)
-                        .requestCode(999) // 请求码，返回时onActivityResult()的第一个参数。
-//						.toolBarColor(toolbarColor) // Toolbar 颜色，默认蓝色。
-//						.statusBarColor(statusBarColor) // StatusBar 颜色，默认蓝色。
-//						.navigationBarColor(navigationBarColor) // NavigationBar 颜色，默认黑色，建议使用默认。
-                        .title("图库") // 配置title。
-                        .selectCount(9) // 最多选择几张图片。
-                        .columnCount(2) // 相册展示列数，默认是2列。
-                        .camera(true) // 是否有拍照功能。
-//						.checkedList() // 已经选择过得图片，相册会自动选中选过的图片，并计数。
-                        .start();
-            }
-        }, 2000);
-
-        gbv_quality.setOnGroupBtnClickListener(new GroupButtonView.OnGroupBtnClickListener() {
-            @Override
-            public void groupBtnClick(String code) {
-//				Toast.makeText(GrayscaleActivity.this, code, Toast.LENGTH_SHORT).show();
-                bookLoading.start();
-                myHandler.postDelayed(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              bookLoading.stop();
-                                          }
-                                      }
-                        , 1000);
-            }
-        });
-
-
-//	private void useLinearLayoutManager() {
-//		// 创建线性布局管理器
-//		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//		// 设置显示布局的方向，默认方向是垂直
-////        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//		// 设置布局管理器
-//		recyclerView.setLayoutManager(linearLayoutManager);
-//	}
-
+        viewPager.setOffscreenPageLimit(2);
+        IndicatorViewPager indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
+        inflate = LayoutInflater.from(getApplicationContext());
+        indicatorViewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 
     }
+
+    public void toShare(View view) {
+        Uri imageUri = getUriToDrawable(view.getContext(), R.drawable.sunrise);
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "我在焕彩制作的图片");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/jpeg");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "send"));
+    }
+
+    public static final Uri getUriToDrawable(@NonNull Context context,
+                                             @AnyRes int drawableId) {
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(drawableId)
+                + '/' + context.getResources().getResourceTypeName(drawableId)
+                + '/' + context.getResources().getResourceEntryName(drawableId) );
+        return imageUri;
+    }
+
+    private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
+        public MyAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public int getCount() {
+            return size;
+        }
+
+        @Override
+        public View getViewForTab(int position, View convertView, ViewGroup container) {
+            if (convertView == null) {
+                convertView = inflate.inflate(R.layout.tab_top, container, false);
+            }
+            TextView textView = (TextView) convertView;
+            textView.setText(names[position % names.length]);
+            textView.setPadding(20, 0, 20, 0);
+            return convertView;
+        }
+
+        @Override
+        public Fragment getFragmentForPage(int position) {
+            WorkFragment workFragment = new WorkFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(GridFeatureImageFragment.INTENT_INT_INDEX, position);
+            workFragment.setArguments(bundle);
+            return workFragment;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return FragmentListPageAdapter.POSITION_NONE;
+        }
+
+    }
+
+
 }
