@@ -1,4 +1,4 @@
-package com.hhxfight.recolorer.Activity.color;
+package com.hhxfight.recolorer.Activity.color.view;
 
 /**
  * Created by HHX on 2017/4/6.

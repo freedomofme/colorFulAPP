@@ -1,4 +1,4 @@
-package com.hhxfight.recolorer.Activity.color;
+package com.hhxfight.recolorer.Activity.color.view;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import com.boycy815.pinchimageview.PinchImageView;
 import com.hhxfight.recolorer.R;
+import com.hhxfight.recolorer.config.Url;
 import com.hhxfight.recolorer.util.AssetsUtil;
+import com.hhxfight.recolorer.util.ImageIoUtil;
 import com.shizhefei.view.indicator.FragmentListPageAdapter;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.ScrollIndicatorView;
@@ -61,7 +63,7 @@ public class ColorTransformActivity extends FragmentActivity {
 
         bg = (PinchImageView) findViewById(R.id.piv_bg);
 
-        Bitmap bitmap = AssetsUtil.getBitmap(this, "apple_0.png");
+        Bitmap bitmap = AssetsUtil.getBitmap(this, "greenAni.png");
         bg.setImageBitmap(bitmap);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
         bookLoading.setVisibility(View.GONE);
@@ -92,6 +94,17 @@ public class ColorTransformActivity extends FragmentActivity {
 //      useStaggeredGridLayoutManager();
 //        recyclerView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        myHandler.post(() ->{
+                    bg.buildDrawingCache();
+                    ImageIoUtil.saveBitmap(Url.APPDIR, "test.png", bg.getDrawingCache());
+                    bg.destroyDrawingCache();
+                }
+        );
     }
 
     private void useLinearLayoutManager() {

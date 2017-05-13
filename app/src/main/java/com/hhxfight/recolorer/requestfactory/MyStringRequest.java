@@ -9,14 +9,14 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.Map;
 
-import static com.hhxfight.recolorer.requestfactory.RequestSingletonFactory.TYPE_UTF8_CHARSET;
-
 /**
  * Created by HHX on 2017/3/23.
  */
 
-public class PostRequest extends StringRequest {
-    public PostRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+public class MyStringRequest extends StringRequest {
+    protected static final String TYPE_UTF8_CHARSET = "charset=UTF-8";
+
+    public MyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
     }
 

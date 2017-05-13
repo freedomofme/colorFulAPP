@@ -72,7 +72,7 @@
             android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            app:groupBtnCodeText="low#mind#high"
+            app:groupBtnCodeText="low#mid#high"
             app:groupBtnNameText="质量低#质量中#质量高" />
     </LinearLayout>
 

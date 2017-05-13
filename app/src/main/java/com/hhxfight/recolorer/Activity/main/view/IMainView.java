@@ -5,6 +5,5 @@ package com.hhxfight.recolorer.Activity.main.view;
  */
 
 public interface IMainView {
-    public void onGetPreefinedMainFold();
-
+    void onGetPreefinedMainFold();
 }

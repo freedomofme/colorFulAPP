@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hhxfight.recolorer.Activity.color.GridFeatureImageFragment;
+import com.hhxfight.recolorer.Activity.color.view.GridFeatureImageFragment;
 import com.hhxfight.recolorer.R;
 import com.shizhefei.view.indicator.FragmentListPageAdapter;
 import com.shizhefei.view.indicator.IndicatorViewPager;

@@ -34,17 +34,17 @@
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".Activity.gray.GrayscaleActivity"
+            android:name=".Activity.gray.view.GrayscaleActivity"
             android:label="@string/title_gray"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
         <activity
-            android:name=".Activity.color.ColorTransformActivity"
+            android:name=".Activity.color.view.ColorTransformActivity"
             android:label="@string/title_gray"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
         <activity
-            android:name=".Activity.manifold.ManifoldActivity"
+            android:name=".Activity.manifold.view.ManifoldActivity"
             android:label="@string/title_gray"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 

@@ -1,33 +1,45 @@
 
-package com.hhxfight.recolorer.Activity.gray;
+package com.hhxfight.recolorer.Activity.gray.view;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.boycy815.pinchimageview.PinchImageView;
+import com.hhxfight.recolorer.Activity.gray.presenter.GrayscalePresenter;
+import com.hhxfight.recolorer.Activity.gray.presenter.IGrayPresenter;
 import com.hhxfight.recolorer.R;
 import com.hhxfight.recolorer.base.BaseActivity;
+import com.hhxfight.recolorer.config.Url;
 import com.hhxfight.recolorer.util.AssetsUtil;
+import com.hhxfight.recolorer.volley.MySingleton;
 import com.hhxfight.recolorer.widget.GroupButtonView;
 import com.victor.loading.book.BookLoading;
 import com.yanzhenjie.album.Album;
 
+import java.util.List;
 
-public class GrayscaleActivity extends BaseActivity {
+
+public class GrayscaleActivity extends BaseActivity implements IGaryView{
 
     PinchImageView bg;
     BookLoading bookLoading;
     GroupButtonView gbv_quality;
     //	RecyclerView recyclerView;
     final Handler myHandler = new Handler();
+    IGrayPresenter grayscalePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gray);
+        grayscalePresenter = new GrayscalePresenter(this, this);
 
         bg = (PinchImageView) findViewById(R.id.piv_bg);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
@@ -35,8 +47,7 @@ public class GrayscaleActivity extends BaseActivity {
         gbv_quality = (GroupButtonView) findViewById(R.id.gbv_quality);
 
 
-//        recyclerView = (RecyclerView) findViewById(R.id.rl_login);
-        Bitmap bitmap = AssetsUtil.getBitmap(this, "apple_0.png");
+        Bitmap bitmap = AssetsUtil.getBitmap(this, "highGray.png");
         bg.setImageBitmap(bitmap);
 
         myHandler.postDelayed(new Runnable() {
@@ -54,7 +65,7 @@ public class GrayscaleActivity extends BaseActivity {
 //						.checkedList() // 已经选择过得图片，相册会自动选中选过的图片，并计数。
                         .start();
             }
-        }, 2000);
+        }, 500);
 
         gbv_quality.setOnGroupBtnClickListener(new GroupButtonView.OnGroupBtnClickListener() {
             @Override
@@ -72,19 +83,47 @@ public class GrayscaleActivity extends BaseActivity {
                                           }
                                       }
                         , 5000);
+                if (code.equals("high")) {
+                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "highGray.png");
+                    bg.setImageBitmap(bitmap);
+                } else if (code.equals("mid")) {
+                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "midGray.png");
+                    bg.setImageBitmap(bitmap);
+                } else {
+                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "lowGray.png");
+                    bg.setImageBitmap(bitmap);
+                }
+
             }
         });
 
+    }
 
-//	private void useLinearLayoutManager() {
-//		// 创建线性布局管理器
-//		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//		// 设置显示布局的方向，默认方向是垂直
-////        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//		// 设置布局管理器
-//		recyclerView.setLayoutManager(linearLayoutManager);
-//	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 999) {
+            if (resultCode == RESULT_OK) { // 判断是否成功。
+                // 拿到用户选择的图片路径List：
+                List<String> pathList = Album.parseResult(data);
+                Log.d("TAG", pathList.toString());
+                grayscalePresenter.postImage(pathList.get(0));
+            } else if (resultCode == RESULT_CANCELED) { // 用户取消选择。
+                // 根据需要提示用户取消了选择。
+            }
+        }
+    }
 
 
+    @Override
+    public void onImgaePosted() {
+        Toast.makeText(this, "图片上传完成", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onImageGrayed(String sid) {
+        Toast.makeText(this, "图片灰度化完成", Toast.LENGTH_SHORT).show();
+
+        MySingleton.getInstance(this.getApplicationContext()).getImageLoader().get(Url.grayImage + "/" + sid, ImageLoader.getImageListener(bg, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
     }
 }

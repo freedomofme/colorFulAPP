@@ -5,5 +5,6 @@ package com.hhxfight.recolorer.Activity.main.presenter;
  */
 
 public interface IMainPresenter {
-    void getPreefinedMainFold();
+    void getPrefinedMainFold();
+    void savePreDefinedMainFold();
 }

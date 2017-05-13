@@ -1,4 +1,4 @@
-package com.hhxfight.recolorer.Activity.color;
+package com.hhxfight.recolorer.Activity.color.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,11 +23,13 @@ public class FeatureImageAdapter extends BaseAdapter
 	private Context mContext;
 	private ArrayList<Integer> mFeatrueData;
 	private ViewHolder mHolder;
+	private int type = 0;
 
-	public FeatureImageAdapter(Context context, ArrayList<Integer> data)
+	public FeatureImageAdapter(Context context, ArrayList<Integer> data, int type)
 	{
 		mContext = context;
 		mFeatrueData = data;
+		this.type = type;
 	}
 
 	@Override
@@ -53,8 +55,15 @@ public class FeatureImageAdapter extends BaseAdapter
 	{
 		if (null == convertView)
 		{
-			convertView = LayoutInflater.from(mContext).inflate(
-					R.layout.gridview_feature_image_item, null);
+			if (type == 0) {
+				convertView = LayoutInflater.from(mContext).inflate(
+						R.layout.gridview_feature_image_item, null);
+			} else if(type == 1) {
+				convertView = LayoutInflater.from(mContext).inflate(
+						R.layout.gridview_feature_image_item2, null);
+			}
+
+
 			mHolder = new ViewHolder();
 			mHolder.iv_feature = (ImageView) convertView.findViewById(R.id.iv_feature);
 		

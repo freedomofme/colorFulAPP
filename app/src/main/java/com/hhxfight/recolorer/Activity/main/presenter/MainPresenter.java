@@ -1,8 +1,8 @@
 package com.hhxfight.recolorer.Activity.main.presenter;
 
-import android.os.Handler;
-import android.os.Looper;
+import android.content.Context;
 
+import com.hhxfight.recolorer.Activity.main.model.PreManifoldSaveModel;
 import com.hhxfight.recolorer.Activity.main.view.IMainView;
 
 /**
@@ -10,15 +10,22 @@ import com.hhxfight.recolorer.Activity.main.view.IMainView;
  */
 
 public class MainPresenter implements IMainPresenter {
-    IMainView iMainView;
-    Handler handler;
-    public MainPresenter(IMainView iMainView) {
+    private IMainView iMainView;
+    private Context mContext;
+    private PreManifoldSaveModel preManifoldSaveModel;
+    public MainPresenter(IMainView iMainView, Context mContext) {
         this.iMainView = iMainView;
-        handler = new Handler(Looper.getMainLooper());
+        this.mContext = mContext;
+        preManifoldSaveModel = new PreManifoldSaveModel(mContext);
     }
 
     @Override
-    public void getPreefinedMainFold() {
+    public void getPrefinedMainFold() {
 
+    }
+
+    @Override
+    public void savePreDefinedMainFold() {
+        preManifoldSaveModel.saveManifoldIntoFile();
     }
 }

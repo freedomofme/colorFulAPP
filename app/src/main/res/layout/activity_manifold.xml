@@ -24,7 +24,7 @@
                 android:layout_centerInParent="true"
                 android:background="#fff"
                 android:gravity="center"
-                android:text="图像变灰"
+                android:text="生成流形"
                 android:textColor="#555"
                 android:textSize="@dimen/title_textsize" />
 

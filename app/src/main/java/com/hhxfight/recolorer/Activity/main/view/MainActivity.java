@@ -10,23 +10,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.hhxfight.recolorer.Activity.color.ColorTransformActivity;
-import com.hhxfight.recolorer.Activity.gray.GrayscaleActivity;
-import com.hhxfight.recolorer.Activity.manifold.ManifoldActivity;
+import com.hhxfight.recolorer.Activity.color.view.ColorTransformActivity;
+import com.hhxfight.recolorer.Activity.gray.view.GrayscaleActivity;
+import com.hhxfight.recolorer.Activity.main.presenter.MainPresenter;
+import com.hhxfight.recolorer.Activity.manifold.view.ManifoldActivity;
 import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
-import com.hhxfight.recolorer.R;
 import com.hhxfight.recolorer.Activity.setting.SettingActivity;
+import com.hhxfight.recolorer.R;
+import com.hhxfight.recolorer.config.Url;
+import com.hhxfight.recolorer.util.ImageIoUtil;
 import com.yanzhenjie.album.Album;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements IMainView{
+public class MainActivity extends AppCompatActivity implements IMainView {
     MyHandler mHandler;
+    MainPresenter mainPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainPresenter = new MainPresenter(this, this);
 
 //        // Example of a call to a native method
 //        TextView tv = (TextView) findViewById(R.id.sample_text);
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements IMainView{
 
 
 
-//        PostRequest postRequest = new PostRequest(Request.Method.POST, Url.test, new Response.Listener<String>(){
+//        MyStringRequest postRequest = new MyStringRequest(Request.Method.POST, Url.test, new Response.Listener<String>(){
 //            @Override
 //            public void onResponse(String response) {
 //                Log.i("Tag",response.toString());
@@ -50,6 +55,12 @@ public class MainActivity extends AppCompatActivity implements IMainView{
 //
 //        postRequest.setPostParam(map);
 //        MySingleton.getInstance(this.getApplicationContext()).getRequestQueue().add(postRequest);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mainPresenter.savePreDefinedMainFold();
     }
 
     @Override
