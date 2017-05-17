@@ -2,12 +2,15 @@ package com.hhxfight.recolorer.Activity.main.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 
 import com.hhxfight.recolorer.config.Url;
 import com.hhxfight.recolorer.util.ImageIoUtil;
 import com.hhxfight.recolorer.util.ResourcesUtil;
+
+import java.io.File;
 
 /**
  * Created by HHX on 2017/5/10.
@@ -20,6 +23,11 @@ public class PreManifoldSaveModel {
     }
 
     public void saveManifoldIntoFile() {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File[] files = ImageIoUtil.getImageByPaths(root + Url.APPDIR + Url.MANIFOLD +  Url.PREDEF);
+        if (files != null && files.length >= 20)
+            return;
+
         HandlerThread handlerThread = new HandlerThread("manifold");
         handlerThread.start();
         Handler subHandler = new Handler(handlerThread.getLooper());

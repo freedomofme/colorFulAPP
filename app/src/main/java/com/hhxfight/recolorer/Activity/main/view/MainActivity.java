@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         setContentView(R.layout.activity_main);
 
         mainPresenter = new MainPresenter(this, this);
+        mainPresenter.savePreDefinedMainFold();
 
 //        // Example of a call to a native method
 //        TextView tv = (TextView) findViewById(R.id.sample_text);
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        mainPresenter.savePreDefinedMainFold();
+
     }
 
     @Override

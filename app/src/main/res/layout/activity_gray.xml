@@ -46,7 +46,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/btn_marginLeft"
                 android:clickable="true"
-                android:onClick="toUpload"
+                android:onClick="toSave"
                 android:text="保存"
                 android:textSize="@dimen/title_textsize" />
         </RelativeLayout>

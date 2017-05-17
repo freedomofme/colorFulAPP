@@ -3,7 +3,6 @@ package com.hhxfight.recolorer.Activity.gray.view;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,11 +13,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.boycy815.pinchimageview.PinchImageView;
 import com.hhxfight.recolorer.Activity.gray.presenter.GrayscalePresenter;
 import com.hhxfight.recolorer.Activity.gray.presenter.IGrayPresenter;
+import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
 import com.hhxfight.recolorer.R;
 import com.hhxfight.recolorer.base.BaseActivity;
-import com.hhxfight.recolorer.config.Url;
-import com.hhxfight.recolorer.util.AssetsUtil;
-import com.hhxfight.recolorer.volley.MySingleton;
 import com.hhxfight.recolorer.widget.GroupButtonView;
 import com.victor.loading.book.BookLoading;
 import com.yanzhenjie.album.Album;
@@ -45,10 +42,10 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
         bookLoading.setVisibility(View.INVISIBLE);
         gbv_quality = (GroupButtonView) findViewById(R.id.gbv_quality);
+        gbv_quality.setCheckedByIndex(2);
 
-
-        Bitmap bitmap = AssetsUtil.getBitmap(this, "highGray.png");
-        bg.setImageBitmap(bitmap);
+//        Bitmap bitmap = AssetsUtil.getBitmap(this, "highGray.png");
+//        bg.setImageBitmap(bitmap);
 
         myHandler.postDelayed(new Runnable() {
             @Override
@@ -65,33 +62,21 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
 //						.checkedList() // 已经选择过得图片，相册会自动选中选过的图片，并计数。
                         .start();
             }
-        }, 500);
+        }, 300);
 
         gbv_quality.setOnGroupBtnClickListener(new GroupButtonView.OnGroupBtnClickListener() {
             @Override
             public void groupBtnClick(String code) {
-//				Toast.makeText(GrayscaleActivity.this, code, Toast.LENGTH_SHORT).show();
-                bookLoading.start();
-                bg.setVisibility(View.INVISIBLE);
-                bookLoading.setVisibility(View.VISIBLE);
-                myHandler.postDelayed(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              bookLoading.stop();
-                                              bookLoading.setVisibility(View.INVISIBLE);
-                                              bg.setVisibility(View.VISIBLE);
-                                          }
-                                      }
-                        , 5000);
+                startLoading();
+
+//                myHandler.postDelayed(() -> stopLoading()
+//                        , 5000);
                 if (code.equals("high")) {
-                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "highGray.png");
-                    bg.setImageBitmap(bitmap);
+                    grayscalePresenter.postImage(null, 3);
                 } else if (code.equals("mid")) {
-                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "midGray.png");
-                    bg.setImageBitmap(bitmap);
+                    grayscalePresenter.postImage(null, 2);
                 } else {
-                    Bitmap bitmap = AssetsUtil.getBitmap(GrayscaleActivity.this, "lowGray.png");
-                    bg.setImageBitmap(bitmap);
+                    grayscalePresenter.postImage(null, 1);
                 }
 
             }
@@ -107,7 +92,8 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
                 // 拿到用户选择的图片路径List：
                 List<String> pathList = Album.parseResult(data);
                 Log.d("TAG", pathList.toString());
-                grayscalePresenter.postImage(pathList.get(0));
+                startLoading();
+                grayscalePresenter.postImage(pathList.get(0), 3);
             } else if (resultCode == RESULT_CANCELED) { // 用户取消选择。
                 // 根据需要提示用户取消了选择。
             }
@@ -121,9 +107,34 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     }
 
     @Override
-    public void onImageGrayed(String sid) {
-        Toast.makeText(this, "图片灰度化完成", Toast.LENGTH_SHORT).show();
+    public void onImageGrayed(String gid) {
+//        Toast.makeText(this, "图片灰度化完成", Toast.LENGTH_SHORT).show();
+//        MySingleton.getInstance(this.getApplicationContext()).getImageLoader().get(Url.grayImage + "/" + gid, ImageLoader.getImageListener(bg, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+    }
 
-        MySingleton.getInstance(this.getApplicationContext()).getImageLoader().get(Url.grayImage + "/" + sid, ImageLoader.getImageListener(bg, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+    @Override
+    public void onGrayedImageGet(ImageLoader.ImageContainer imageContainer) {
+        Toast.makeText(this, "图片灰度化完成", Toast.LENGTH_SHORT).show();
+        bg.setImageBitmap(imageContainer.getBitmap());
+        stopLoading();
+    }
+
+    public void toSave(View v) {
+        grayscalePresenter.saveGray(bg);
+        Toast.makeText(this, "灰度图像已保存", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MyWorkActivity.class));
+        finish();
+    }
+
+    private void stopLoading() {
+        bookLoading.stop();
+        bookLoading.setVisibility(View.INVISIBLE);
+        bg.setVisibility(View.VISIBLE);
+    }
+
+    private void startLoading() {
+        bookLoading.start();
+        bg.setVisibility(View.INVISIBLE);
+        bookLoading.setVisibility(View.VISIBLE);
     }
 }

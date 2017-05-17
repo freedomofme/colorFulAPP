@@ -46,7 +46,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/btn_marginLeft"
                 android:clickable="true"
-                android:onClick="toUpload"
+                android:onClick="toSave"
                 android:text="保存"
                 android:textSize="@dimen/title_textsize" />
         </RelativeLayout>
@@ -58,26 +58,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/mine_arrow_padding"
-            android:layout_marginRight="@dimen/mine_arrow_padding"
-            android:background="@color/gray" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="换色模板"
-            android:textSize="@dimen/text_tip"
-            android:textColor="#888"
-            android:gravity="center"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/mine_arrow_padding"
-            android:layout_marginRight="@dimen/mine_arrow_padding"
-            android:background="@color/gray" />
 
         <!--<android.support.v7.widget.RecyclerView-->
             <!--android:id="@+id/rv_color"-->
@@ -107,6 +88,6 @@
     <com.victor.loading.book.BookLoading
         android:id="@+id/bl_bookloading"
         android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true" />
 </RelativeLayout>

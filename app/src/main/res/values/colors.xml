@@ -12,5 +12,7 @@
     <color name="tab_top_text_1">#aaa</color>
     <color name="tab_top_text_2">#000</color>
     <color name="white">#fafafa</color>
+    <color name="unselected">#ff8cae3b</color>
+    <color name="selected">#a8cf45</color>
 
 </resources>

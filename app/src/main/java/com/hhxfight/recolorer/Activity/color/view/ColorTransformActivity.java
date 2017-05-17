@@ -1,5 +1,6 @@
 package com.hhxfight.recolorer.Activity.color.view;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,18 +9,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.boycy815.pinchimageview.PinchImageView;
+import com.hhxfight.recolorer.Activity.color.presenter.ColorTransformPresenter;
+import com.hhxfight.recolorer.Activity.color.presenter.IColorPresenter;
+import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
 import com.hhxfight.recolorer.R;
-import com.hhxfight.recolorer.config.Url;
-import com.hhxfight.recolorer.util.AssetsUtil;
 import com.hhxfight.recolorer.util.ImageIoUtil;
 import com.shizhefei.view.indicator.FragmentListPageAdapter;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -29,16 +32,19 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import com.victor.loading.book.BookLoading;
 import com.yanzhenjie.album.Album;
 
+import java.util.List;
+
 /**
  * Created by HHX on 2017/4/6.
  */
 
 
-public class ColorTransformActivity extends FragmentActivity {
+public class ColorTransformActivity extends FragmentActivity implements IColorTransformView{
 
     PinchImageView bg;
     RecyclerView recyclerView;
     BookLoading bookLoading;
+    IColorPresenter iColorPresenter;
     final Handler myHandler = new Handler();
 
     @Override
@@ -46,6 +52,8 @@ public class ColorTransformActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color);
         inflate = LayoutInflater.from(getBaseContext());
+
+        iColorPresenter = new ColorTransformPresenter(this, this);
 
         ScrollIndicatorView indicator = (ScrollIndicatorView) findViewById(R.id.siv_features);
         indicator.setScrollBar(new ColorBar(this, Color.RED, 5));
@@ -63,8 +71,8 @@ public class ColorTransformActivity extends FragmentActivity {
 
         bg = (PinchImageView) findViewById(R.id.piv_bg);
 
-        Bitmap bitmap = AssetsUtil.getBitmap(this, "greenAni.png");
-        bg.setImageBitmap(bitmap);
+//        Bitmap bitmap = AssetsUtil.getBitmap(this, "greenAni.png");
+//        bg.setImageBitmap(bitmap);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
         bookLoading.setVisibility(View.GONE);
 
@@ -84,81 +92,64 @@ public class ColorTransformActivity extends FragmentActivity {
 //						.checkedList() // 已经选择过得图片，相册会自动选中选过的图片，并计数。
                         .start();
             }
-        }, 2000);
+        }, 300);
 
-//        recyclerView = (RecyclerView) findViewById(R.id.rv_color);
-//        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
-//        adapter = new MyAdapter(this, getPicUrls());
-//        useLinearLayoutManager();
-//        useGridLayoutManager();
-//      useStaggeredGridLayoutManager();
-//        recyclerView.setAdapter(adapter);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 999) {
+            if (resultCode == RESULT_OK) { // 判断是否成功。
+                // 拿到用户选择的图片路径List：
+                List<String> pathList = Album.parseResult(data);
+                Log.d("TAG", pathList.toString());
+                startLoading();
+                iColorPresenter.postImage(pathList.get(0));
+            } else if (resultCode == RESULT_CANCELED) { // 用户取消选择。
+                // 根据需要提示用户取消了选择。
+            }
+        }
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        myHandler.post(() ->{
-                    bg.buildDrawingCache();
-                    ImageIoUtil.saveBitmap(Url.APPDIR, "test.png", bg.getDrawingCache());
-                    bg.destroyDrawingCache();
-                }
-        );
     }
 
-    private void useLinearLayoutManager() {
-        // 创建线性布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        // 设置显示布局的方向，默认方向是垂直
-//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        // 设置布局管理器
-        recyclerView.setLayoutManager(linearLayoutManager);
+    public void toSave(View v) {
+        iColorPresenter.saveColor(bg);
+        Toast.makeText(this, "换色图像已保存", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MyWorkActivity.class));
+        finish();
     }
 
-    private void useGridLayoutManager() {
-        // 创建网格布局管理器
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
-        // 设置显示布局的方向，默认方向是垂直
-//        gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        // 设置布局管理器
-        recyclerView.setLayoutManager(gridLayoutManager);
+
+    private void stopLoading() {
+        bookLoading.stop();
+        bookLoading.setVisibility(View.INVISIBLE);
+        bg.setVisibility(View.VISIBLE);
     }
 
-    private String[] getPicUrls() {
-        String[] picUrls = new String[]{
-                "http://img0.hao123.com/data/1_2d6066fea769896573b01478c2312832_510",
-                "http://img4.hao123.com/data/1_dd84959fa7910d741d0f4cc9dec79bdd_510",
-                "http://img6.hao123.com/data/1_72b86760cbcf0a9251e4c5d28127d3f6_510",
-                "http://img3.hao123.com/data/1_ae18d3a1b65a0194a8f5fa2c76f3f8a7_0",
-                "http://img5.hao123.com/data/1_bc6ef28f063aa1c0d72daed48a18554a_0",
-                "http://img.hao123.com/data/1_62333db73d9fa2fe2a1db6f26edab9f3_0",
-                "http://img.hao123.com/data/1_0c4f1dc3daab007063fac855c9825ca5_0",
-                "http://img6.hao123.com/data/1_22699180ce1bfef7db27c205a3b9cda2_0",
-                "http://img4.hao123.com/data/1_758d06615bb089bcc979aa974442720a_0",
-                "http://img.hao123.com/data/1_bf80a0aa0901e1a52ba2cd03c164511e_0"
-        };
-        return picUrls;
-    }
-
-    private void controlLoading() {
+    private void startLoading() {
         bookLoading.start();
         bg.setVisibility(View.INVISIBLE);
         bookLoading.setVisibility(View.VISIBLE);
-        myHandler.postDelayed(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      bookLoading.stop();
-                                      bookLoading.setVisibility(View.GONE);
-                                      bg.setVisibility(View.VISIBLE);
-                                  }
-                              }
-                , 5000);
     }
 
+    @Override
+    public void onImagePosted(String path) {
+        stopLoading();
+        Bitmap bitmap = ImageIoUtil.decodeSampledBitmap(path, 600, 600);
+        bg.setImageBitmap(bitmap);
 
-    public void toUpload(View view) {
-        controlLoading();
+        Toast.makeText(this, "图片上传完成", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onTransformedImageGet(ImageLoader.ImageContainer imageContainer) {
+        Toast.makeText(this, "图片色彩转移完成", Toast.LENGTH_SHORT).show();
+        bg.setImageBitmap(imageContainer.getBitmap());
+        stopLoading();
     }
 
     public void toBack(View view) {
@@ -168,7 +159,6 @@ public class ColorTransformActivity extends FragmentActivity {
     private String[] names = {"系统预设", "用户自定义"};
     private int size = names.length;
     private LayoutInflater inflate;
-
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         public MyAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);

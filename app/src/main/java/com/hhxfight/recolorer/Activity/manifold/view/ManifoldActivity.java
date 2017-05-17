@@ -1,6 +1,7 @@
 package com.hhxfight.recolorer.Activity.manifold.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.boycy815.pinchimageview.PinchImageView;
 import com.hhxfight.recolorer.Activity.manifold.presenter.IManifoldPresenter;
 import com.hhxfight.recolorer.Activity.manifold.presenter.ManifoldPresenter;
+import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
 import com.hhxfight.recolorer.R;
 import com.hhxfight.recolorer.base.BaseActivity;
 import com.hhxfight.recolorer.widget.GroupButtonView;
@@ -27,6 +29,7 @@ public class ManifoldActivity extends BaseActivity implements IManifoldView{
     //	RecyclerView recyclerView;
     final Handler myHandler = new Handler();
     IManifoldPresenter manifoldPresenter;
+    Bitmap oneBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +105,24 @@ public class ManifoldActivity extends BaseActivity implements IManifoldView{
 
     @Override
     public void onManifoldGet(ImageLoader.ImageContainer imageContainer, int choice) {
-        if (choice == 1)
+        if (choice == 1) {
             Toast.makeText(this, "一维流形已获取", Toast.LENGTH_SHORT).show();
-        else if (choice == 2)
+            oneBitmap = imageContainer.getBitmap();
+            bg.setImageBitmap(oneBitmap);
+        }
+        else if (choice == 2) {
             Toast.makeText(this, "二维流形已获取", Toast.LENGTH_SHORT).show();
+            bg.setImageBitmap(imageContainer.getBitmap());
+        }
         stopLoading();
-        bg.setImageBitmap(imageContainer.getBitmap());
+    }
+
+    public void toSave(View v) {
+        bg.setImageBitmap(oneBitmap);
+        manifoldPresenter.saveManifold(bg);
+        Toast.makeText(this, "模板已保存", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MyWorkActivity.class));
+        finish();
     }
 
     private void startLoading() {
@@ -120,5 +135,6 @@ public class ManifoldActivity extends BaseActivity implements IManifoldView{
         bg.setVisibility(View.VISIBLE);
         bookLoading.setVisibility(View.INVISIBLE);
     }
+
 
 }

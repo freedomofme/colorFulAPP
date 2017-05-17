@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.hhxfight.recolorer.R;
+import com.hhxfight.recolorer.bean.LocalImageBean;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,11 @@ import java.util.ArrayList;
 public class FeatureImageAdapter extends BaseAdapter
 {
 	private Context mContext;
-	private ArrayList<Integer> mFeatrueData;
+	private ArrayList<LocalImageBean> mFeatrueData;
 	private ViewHolder mHolder;
 	private int type = 0;
 
-	public FeatureImageAdapter(Context context, ArrayList<Integer> data, int type)
+	public FeatureImageAdapter(Context context, ArrayList<LocalImageBean> data, int type)
 	{
 		mContext = context;
 		mFeatrueData = data;
@@ -73,7 +74,7 @@ public class FeatureImageAdapter extends BaseAdapter
 			mHolder = (ViewHolder) convertView.getTag();
 		}
 
-		mHolder.iv_feature.setImageResource(mFeatrueData.get(position));
+		mHolder.iv_feature.setImageBitmap(mFeatrueData.get(position).bitmap);
 		
 		return convertView;
 	}

@@ -119,4 +119,16 @@ public class GroupButtonView extends LinearLayout {
 	public void setOnGroupBtnClickListener(OnGroupBtnClickListener listener) {
 		this.listener = listener;
 	}
+
+	public void setCheckedByIndex(int index) {
+		for (int i = 0; i < mRg.getChildCount(); i++) {
+			if (i == index) {
+				((RadioButton)mRg.getChildAt(i)).setChecked(true);
+			} else {
+				((RadioButton)mRg.getChildAt(i)).setChecked(false);
+			}
+		}
+
+
+	}
 }
