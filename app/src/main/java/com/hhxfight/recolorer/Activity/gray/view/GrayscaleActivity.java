@@ -3,6 +3,7 @@ package com.hhxfight.recolorer.Activity.gray.view;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     PinchImageView bg;
     BookLoading bookLoading;
     GroupButtonView gbv_quality;
+    Bitmap grayBitmapTemp;
     //	RecyclerView recyclerView;
     final Handler myHandler = new Handler();
     IGrayPresenter grayscalePresenter;
@@ -115,12 +117,13 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     @Override
     public void onGrayedImageGet(ImageLoader.ImageContainer imageContainer) {
         Toast.makeText(this, "图片灰度化完成", Toast.LENGTH_SHORT).show();
-        bg.setImageBitmap(imageContainer.getBitmap());
+        grayBitmapTemp = imageContainer.getBitmap();
+        bg.setImageBitmap(grayBitmapTemp);
         stopLoading();
     }
 
     public void toSave(View v) {
-        grayscalePresenter.saveGray(bg);
+        grayscalePresenter.saveGray(grayBitmapTemp);
         Toast.makeText(this, "灰度图像已保存", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MyWorkActivity.class));
         finish();

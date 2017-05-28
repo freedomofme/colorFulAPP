@@ -25,7 +25,7 @@ public class PreManifoldSaveModel {
     public void saveManifoldIntoFile() {
         String root = Environment.getExternalStorageDirectory().toString();
         File[] files = ImageIoUtil.getImageByPaths(root + Url.APPDIR + Url.MANIFOLD +  Url.PREDEF);
-        if (files != null && files.length >= 20)
+        if (files != null && files.length >= 23)
             return;
 
         HandlerThread handlerThread = new HandlerThread("manifold");

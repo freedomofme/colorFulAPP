@@ -1,8 +1,8 @@
 package com.hhxfight.recolorer.Activity.manifold.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -50,7 +50,7 @@ public class ManifoldPresenter implements IManifoldPresenter {
                         JSONArray subArray = obj.optJSONArray("links");
 
                         sid = subArray.optString(0);
-                        mid = subArray.optString(1);
+//                        mid = subArray.optString(1);
                     }
                     iManifoldView.onImagePosted(sid);
                     getManifold(1);
@@ -91,9 +91,7 @@ public class ManifoldPresenter implements IManifoldPresenter {
     }
 
     @Override
-    public void saveManifold(View bg) {
-        bg.buildDrawingCache();
-        ImageIoUtil.saveBitmap(Url.APPDIR + Url.MANIFOLD + Url.USERDEF, System.currentTimeMillis() +".png", bg.getDrawingCache());
-        bg.destroyDrawingCache();
+    public void saveManifold(Bitmap bitmap) {
+        ImageIoUtil.saveBitmap(Url.APPDIR + Url.MANIFOLD + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
     }
 }

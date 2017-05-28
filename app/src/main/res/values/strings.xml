@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Recolorer</string>
+    <string name="app_name">焕彩</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_gray">图像变灰</string>
 

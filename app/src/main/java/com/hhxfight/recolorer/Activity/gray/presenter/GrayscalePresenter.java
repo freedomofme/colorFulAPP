@@ -1,8 +1,8 @@
 package com.hhxfight.recolorer.Activity.gray.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -45,7 +45,7 @@ public class GrayscalePresenter implements IGrayPresenter {
         if (p != null && p.length() > 0)
             this.holdPath = p;
 
-        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImage, holdPath, new Response.Listener<String>() {
+        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImageNotCreateM, holdPath, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("Tag", response.toString());
@@ -113,10 +113,8 @@ public class GrayscalePresenter implements IGrayPresenter {
     }
 
     @Override
-    public void saveGray(View bg) {
-        bg.buildDrawingCache();
-        ImageIoUtil.saveBitmap(Url.APPDIR + Url.GRAY + Url.USERDEF, System.currentTimeMillis() +".png", bg.getDrawingCache());
-        bg.destroyDrawingCache();
+    public void saveGray(Bitmap bitmap) {
+        ImageIoUtil.saveBitmap(Url.APPDIR + Url.GRAY + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
     }
 
 }

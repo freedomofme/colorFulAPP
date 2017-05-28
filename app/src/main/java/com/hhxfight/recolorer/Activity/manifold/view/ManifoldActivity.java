@@ -118,8 +118,7 @@ public class ManifoldActivity extends BaseActivity implements IManifoldView{
     }
 
     public void toSave(View v) {
-        bg.setImageBitmap(oneBitmap);
-        manifoldPresenter.saveManifold(bg);
+        manifoldPresenter.saveManifold(oneBitmap);
         Toast.makeText(this, "模板已保存", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MyWorkActivity.class));
         finish();

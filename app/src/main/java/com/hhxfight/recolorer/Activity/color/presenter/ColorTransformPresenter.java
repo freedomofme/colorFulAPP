@@ -1,8 +1,8 @@
 package com.hhxfight.recolorer.Activity.color.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -12,6 +12,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.hhxfight.recolorer.Activity.color.view.IColorTransformView;
 import com.hhxfight.recolorer.config.Url;
+import com.hhxfight.recolorer.database.DBHelper;
+import com.hhxfight.recolorer.database.MainfoldDao;
 import com.hhxfight.recolorer.requestfactory.DefaultErrorListener;
 import com.hhxfight.recolorer.requestfactory.MultipartRequest;
 import com.hhxfight.recolorer.util.ImageIoUtil;
@@ -74,7 +76,14 @@ public class ColorTransformPresenter implements IColorPresenter {
     @Override
     public void postTempleteImage(String path) {
         System.out.println(path);
-        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImage, path, new Response.Listener<String>() {
+        MainfoldDao mainfoldDao = new MainfoldDao(DBHelper.getInstance(mContext));
+        String holdSid = mainfoldDao.getSid(path);
+        if (holdSid != null) {
+            doColoredTransform(0);
+            return;
+        }
+
+        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImageNotCreateM, path, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("Tag", response.toString());
@@ -85,6 +94,7 @@ public class ColorTransformPresenter implements IColorPresenter {
                         JSONObject obj = jsonArray.optJSONObject(i);
                         JSONArray subArray = obj.optJSONArray("links");
                         templeteSid = subArray.optString(0);
+                        mainfoldDao.insert(path,templeteSid);
                         doColoredTransform(0);
                     }
 
@@ -105,7 +115,7 @@ public class ColorTransformPresenter implements IColorPresenter {
     @Override
     public void doColoredTransform(int templateSource) {
         if (sid == null || templeteSid == null) {
-            Toast.makeText(mContext, "图片上传中，请等待", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "请等待图片上传完成", Toast.LENGTH_SHORT).show();
         }
 
         HashMap<String, String> params = new HashMap<String, String>();
@@ -149,10 +159,8 @@ public class ColorTransformPresenter implements IColorPresenter {
     }
 
     @Override
-    public void saveColor(View bg) {
-        bg.buildDrawingCache();
-        ImageIoUtil.saveBitmap(Url.APPDIR + Url.COLOR + Url.USERDEF, System.currentTimeMillis() +".png", bg.getDrawingCache());
-        bg.destroyDrawingCache();
+    public void saveColor(Bitmap bitmap) {
+        ImageIoUtil.saveBitmap(Url.APPDIR + Url.COLOR + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
     }
 
 

@@ -24,7 +24,7 @@ public class ResourcesUtil {
 
     public static List<Integer> getMainfoldDrawableId(Context context) {
         ArrayList<Integer> manifoldList = new ArrayList<>();
-        for (int i = 0; i <= 20; i++) {
+        for (int i = 0; i <= 23; i++) {
             int drawable = context.getResources().getIdentifier("sys" + i + "",
                     "drawable", context.getPackageName());
             manifoldList.add(drawable);

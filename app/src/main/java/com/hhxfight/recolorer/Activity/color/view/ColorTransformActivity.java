@@ -45,6 +45,7 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
     RecyclerView recyclerView;
     BookLoading bookLoading;
     IColorPresenter iColorPresenter;
+    Bitmap colorBitmapTemp;
     final Handler myHandler = new Handler();
 
     @Override
@@ -117,7 +118,7 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
     }
 
     public void toSave(View v) {
-        iColorPresenter.saveColor(bg);
+        iColorPresenter.saveColor(colorBitmapTemp);
         Toast.makeText(this, "换色图像已保存", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MyWorkActivity.class));
         finish();
@@ -148,7 +149,8 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
     @Override
     public void onTransformedImageGet(ImageLoader.ImageContainer imageContainer) {
         Toast.makeText(this, "图片色彩转移完成", Toast.LENGTH_SHORT).show();
-        bg.setImageBitmap(imageContainer.getBitmap());
+        colorBitmapTemp = imageContainer.getBitmap();
+        bg.setImageBitmap(colorBitmapTemp);
         stopLoading();
     }
 
