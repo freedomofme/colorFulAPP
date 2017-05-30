@@ -125,6 +125,8 @@ public class GrayscalePresenter implements IGrayPresenter {
         ImageIoUtil.saveBitmap(Url.APPDIR + Url.GRAY + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
     }
 
+    public native String reverseImage();
+
     @Override
     public void doReverse(Bitmap bitmap) {
         Mat src = new Mat();
@@ -132,7 +134,7 @@ public class GrayscalePresenter implements IGrayPresenter {
 
         Mat result = Mat.zeros(src.size(), src.type());
 
-        NativeCode.ReverseImage(src.getNativeObjAddr(), result.getNativeObjAddr());
+        Log.i("Tag", reverseImage());
 
         Bitmap bmp = Bitmap.createBitmap(result.width(), result.height(),
                 Bitmap.Config.ARGB_8888);

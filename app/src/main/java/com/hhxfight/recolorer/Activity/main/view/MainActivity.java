@@ -17,9 +17,12 @@ import com.hhxfight.recolorer.Activity.manifold.view.ManifoldActivity;
 import com.hhxfight.recolorer.Activity.mywork.MyWorkActivity;
 import com.hhxfight.recolorer.Activity.setting.SettingActivity;
 import com.hhxfight.recolorer.R;
-import com.hhxfight.recolorer.config.Url;
-import com.hhxfight.recolorer.util.ImageIoUtil;
 import com.yanzhenjie.album.Album;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
         mainPresenter = new MainPresenter(this, this);
         mainPresenter.savePreDefinedMainFold();
-        Log.i("Tag", stringFromJNI());
+
 //        // Example of a call to a native method
 //        TextView tv = (TextView) findViewById(R.id.sample_text);
 //        tv.setText(stringFromJNI());
@@ -64,6 +67,37 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
     }
 
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i("OpenCV", "OpenCV loaded successfully");
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d("OpenCV", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
+        } else {
+            Log.d("OpenCV", "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            Log.i("Tag", stringFromJNI());
+            Log.i("Tag", reverse());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100) {
@@ -81,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+    public native String reverse();
 
     // Used to load the 'native-lib' library on application startup.
     static {
