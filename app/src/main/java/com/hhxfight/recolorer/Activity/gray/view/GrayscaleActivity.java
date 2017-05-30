@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -29,6 +30,8 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     PinchImageView bg;
     BookLoading bookLoading;
     GroupButtonView gbv_quality;
+    Boolean isFront = true;
+    ImageView iv_reverse;
     Bitmap grayBitmapTemp;
     //	RecyclerView recyclerView;
     final Handler myHandler = new Handler();
@@ -41,6 +44,7 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
         grayscalePresenter = new GrayscalePresenter(this, this);
 
         bg = (PinchImageView) findViewById(R.id.piv_bg);
+        iv_reverse = (ImageView) findViewById(R.id.iv_reverse);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
         bookLoading.setVisibility(View.INVISIBLE);
         gbv_quality = (GroupButtonView) findViewById(R.id.gbv_quality);
@@ -70,9 +74,6 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
             @Override
             public void groupBtnClick(String code) {
                 startLoading();
-
-//                myHandler.postDelayed(() -> stopLoading()
-//                        , 5000);
                 if (code.equals("high")) {
                     grayscalePresenter.postImage(null, 3);
                 } else if (code.equals("mid")) {
@@ -81,6 +82,19 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
                     grayscalePresenter.postImage(null, 1);
                 }
 
+            }
+        });
+
+        iv_reverse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFront) {
+                    iv_reverse.setImageResource(R.mipmap.ic_eyedropper_9_240_r);
+                } else {
+                    iv_reverse.setImageResource(R.mipmap.ic_eyedropper_9_240);
+                }
+                isFront = !isFront;
+                grayscalePresenter.doReverse(grayBitmapTemp);
             }
         });
 
@@ -122,6 +136,14 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
         stopLoading();
     }
 
+    @Override
+    public void onReversed(Bitmap reversedBitmap) {
+        if (reversedBitmap != null) {
+            iv_reverse.setImageBitmap(reversedBitmap);
+            grayBitmapTemp = reversedBitmap;
+        }
+    }
+
     public void toSave(View v) {
         grayscalePresenter.saveGray(grayBitmapTemp);
         Toast.makeText(this, "灰度图像已保存", Toast.LENGTH_SHORT).show();
@@ -130,12 +152,14 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     }
 
     private void stopLoading() {
+        iv_reverse.setVisibility(View.VISIBLE);
         bookLoading.stop();
         bookLoading.setVisibility(View.INVISIBLE);
         bg.setVisibility(View.VISIBLE);
     }
 
     private void startLoading() {
+        iv_reverse.setVisibility(View.INVISIBLE);
         bookLoading.start();
         bg.setVisibility(View.INVISIBLE);
         bookLoading.setVisibility(View.VISIBLE);

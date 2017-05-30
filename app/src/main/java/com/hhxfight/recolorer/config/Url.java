@@ -5,11 +5,11 @@ package com.hhxfight.recolorer.config;
  */
 
 public class Url {
-    private static final String pre = "http://192.168.253.5";
-    private static final String port = ":5000";
+//    private static final String pre = "http://192.168.253.5";
+//    private static final String port = ":5000";
 
-//    private static final String pre = "http://101.200.58.119";
-//    private static final String port = ":80";
+    private static final String pre = "http://47.94.93.186";
+    private static final String port = ":80";
     public static final String test = pre + port + "/uploadFile";
     public static final String uploadImage = pre + port + "/uploadFile";
     public static final String uploadImageNotCreateM = pre + port + "/uploadFileNotCreateM";

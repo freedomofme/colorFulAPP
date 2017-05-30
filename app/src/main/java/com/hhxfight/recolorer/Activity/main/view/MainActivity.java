@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
         mainPresenter = new MainPresenter(this, this);
         mainPresenter.savePreDefinedMainFold();
-
+        Log.i("Tag", stringFromJNI());
 //        // Example of a call to a native method
 //        TextView tv = (TextView) findViewById(R.id.sample_text);
 //        tv.setText(stringFromJNI());

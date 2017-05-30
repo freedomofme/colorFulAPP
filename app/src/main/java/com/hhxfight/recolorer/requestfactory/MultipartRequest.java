@@ -1,5 +1,6 @@
 package com.hhxfight.recolorer.requestfactory;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -8,13 +9,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-
-import org.apache.commons.io.FileUtils;
+import com.hhxfight.recolorer.util.ImageIoUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -28,6 +27,9 @@ public class MultipartRequest extends Request<String> {
     private final String path;
     private final String twoHyphens = "--";
     private final String lineEnd = "\r\n";
+
+    private int maxHeight = 500; // 小于1000
+    private int maxWeight = 500; // 小于1000
 
     public MultipartRequest(String url, String path, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(Method.POST, url, errorListener);
@@ -45,7 +47,13 @@ public class MultipartRequest extends Request<String> {
     public byte[] getBody() throws AuthFailureError {
         byte[] mMultipartBody = null;
         try {
-            byte bytes[] = FileUtils.readFileToByteArray(new File(path));
+//            byte bytes[] = FileUtils.readFileToByteArray(new File(path));
+            Bitmap bitmap = ImageIoUtil.decodeSampledFile(path, maxWeight, maxHeight);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            baos.close();
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             DataOutputStream dos = new DataOutputStream(bos);
             try {
@@ -60,6 +68,9 @@ public class MultipartRequest extends Request<String> {
                 mMultipartBody = bos.toByteArray();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                dos.close();
+                bos.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

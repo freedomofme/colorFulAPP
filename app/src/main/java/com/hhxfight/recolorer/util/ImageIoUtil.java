@@ -60,7 +60,7 @@ public class ImageIoUtil {
             // keeps both
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+                    || (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
@@ -86,6 +86,7 @@ public class ImageIoUtil {
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        options.inScaled = false;
         BitmapFactory.decodeResource(res, id, options);
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options,reqWidth,
@@ -93,6 +94,19 @@ public class ImageIoUtil {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, id, options);
+    }
+
+    public static Bitmap decodeSampledFile(String path, int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path,options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options,reqWidth,
+                reqHeight);
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
     }
 
     public static File[] getImageByPaths(String path) {

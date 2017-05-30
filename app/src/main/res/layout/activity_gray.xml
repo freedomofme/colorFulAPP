@@ -81,4 +81,13 @@
         android:layout_width="150dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true" />
+     <ImageView
+         android:id="@+id/iv_reverse"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
+         android:src="@mipmap/ic_eyedropper_9_240"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentEnd="true"
+         android:layout_marginBottom="55dp"
+         android:layout_marginRight="5dp" />
 </RelativeLayout>

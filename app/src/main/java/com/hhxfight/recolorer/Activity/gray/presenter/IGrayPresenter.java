@@ -10,4 +10,6 @@ public interface IGrayPresenter {
     void postImage(String path, int kNearest);
     void getGray(String gid);
     void saveGray(Bitmap bitmap);
+    void doReverse(Bitmap bitmap);
 }
+

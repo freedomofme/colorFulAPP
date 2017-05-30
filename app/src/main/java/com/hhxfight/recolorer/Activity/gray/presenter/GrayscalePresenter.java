@@ -14,11 +14,14 @@ import com.hhxfight.recolorer.config.Url;
 import com.hhxfight.recolorer.requestfactory.DefaultErrorListener;
 import com.hhxfight.recolorer.requestfactory.MultipartRequest;
 import com.hhxfight.recolorer.util.ImageIoUtil;
+import com.hhxfight.recolorer.util.NativeCode;
 import com.hhxfight.recolorer.volley.MySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -44,6 +47,11 @@ public class GrayscalePresenter implements IGrayPresenter {
     public void postImage(String p, int kNearest) {
         if (p != null && p.length() > 0)
             this.holdPath = p;
+        if (sid != null) {
+            iGrayView.onImgaePosted();
+            doGray(kNearest);
+            return;
+        }
 
         MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImageNotCreateM, holdPath, new Response.Listener<String>() {
             @Override
@@ -115,6 +123,28 @@ public class GrayscalePresenter implements IGrayPresenter {
     @Override
     public void saveGray(Bitmap bitmap) {
         ImageIoUtil.saveBitmap(Url.APPDIR + Url.GRAY + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
+    }
+
+    @Override
+    public void doReverse(Bitmap bitmap) {
+        Mat src = new Mat();
+        Utils.bitmapToMat(bitmap, src);
+
+        Mat result = Mat.zeros(src.size(), src.type());
+
+        NativeCode.ReverseImage(src.getNativeObjAddr(), result.getNativeObjAddr());
+
+        Bitmap bmp = Bitmap.createBitmap(result.width(), result.height(),
+                Bitmap.Config.ARGB_8888);
+        try {
+            Utils.matToBitmap(result, bmp);
+        } catch (Exception e) {
+            Log.e("Tag", "Utils.matToBitmap() throws an exception: " + e.getMessage());
+            bmp.recycle();
+            bmp = null;
+        }
+
+        iGrayView.onReversed(bmp);
     }
 
 }

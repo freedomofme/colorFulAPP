@@ -44,7 +44,7 @@ public class ColorTransformPresenter implements IColorPresenter {
 
     @Override
     public void postImage(String path) {
-        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImage, path, new Response.Listener<String>() {
+        MultipartRequest multipartRequest = new MultipartRequest(Url.uploadImageNotCreateM, path, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("Tag", response.toString());
@@ -66,7 +66,7 @@ public class ColorTransformPresenter implements IColorPresenter {
         }, new DefaultErrorListener(mContext));
 
         multipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
+                15000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -75,10 +75,11 @@ public class ColorTransformPresenter implements IColorPresenter {
 
     @Override
     public void postTempleteImage(String path) {
-        System.out.println(path);
         MainfoldDao mainfoldDao = new MainfoldDao(DBHelper.getInstance(mContext));
-        String holdSid = mainfoldDao.getSid(path);
-        if (holdSid != null) {
+        String holdTempleteSid = mainfoldDao.getSid(path);
+        if (holdTempleteSid != null) {
+            templeteSid = holdTempleteSid;
+            Log.i("Tag", "cache got, sid: " + templeteSid);
             doColoredTransform(0);
             return;
         }
@@ -116,6 +117,7 @@ public class ColorTransformPresenter implements IColorPresenter {
     public void doColoredTransform(int templateSource) {
         if (sid == null || templeteSid == null) {
             Toast.makeText(mContext, "请等待图片上传完成", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         HashMap<String, String> params = new HashMap<String, String>();

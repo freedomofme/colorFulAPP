@@ -1,5 +1,7 @@
 package com.hhxfight.recolorer.Activity.gray.view;
 
+import android.graphics.Bitmap;
+
 import com.android.volley.toolbox.ImageLoader;
 
 /**
@@ -10,4 +12,5 @@ public interface IGaryView{
     void onImgaePosted();
     void onImageGrayed(String gid);
     void onGrayedImageGet(ImageLoader.ImageContainer imageContainer);
+    void onReversed(Bitmap reversedBitmap);
 }

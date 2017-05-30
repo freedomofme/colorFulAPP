@@ -34,13 +34,10 @@ public class GridFeatureImageFragment extends LazyFragment {
 			readImages(manifoldList, 0, 150);
 			gv_featureimage = (GridView) findViewById(R.id.gv_featureimage);
 			gv_featureimage.setAdapter(new FeatureImageAdapter(getActivity(), manifoldList, 0));
-			gv_featureimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					view.setSelected(true);
-					((ColorTransformActivity)getActivity()).iColorPresenter.postTempleteImage(manifoldList.get(position).absPath);
-				}
-			});
+			gv_featureimage.setOnItemClickListener((parent, view, position, id) -> {
+                view.setSelected(true);
+                ((ColorTransformActivity)getActivity()).iColorPresenter.postTempleteImage(manifoldList.get(position).absPath);
+            });
 		}
 
 		if (1 == getArguments().getInt(INTENT_INT_INDEX)) {
