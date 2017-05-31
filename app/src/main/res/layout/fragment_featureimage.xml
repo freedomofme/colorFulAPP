@@ -17,7 +17,9 @@
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="1dp"
-        android:choiceMode="singleChoice">
+        android:choiceMode="singleChoice"
+        android:listSelector="@drawable/selector"
+        >
     </GridView>
 
 </LinearLayout>

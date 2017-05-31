@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hhxfight.recolorer.Activity.color.view.FeatureImageAdapter;
 import com.hhxfight.recolorer.Activity.color.view.GridFeatureImageFragment;
 import com.hhxfight.recolorer.R;
 import com.shizhefei.view.indicator.FragmentListPageAdapter;
@@ -27,11 +28,14 @@ import com.shizhefei.view.indicator.ScrollIndicatorView;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 
+import java.io.File;
+
 
 public class MyWorkActivity extends FragmentActivity {
     private String[] names = {"系统模板", "我的模板", "灰色的图片", "换色的图片"};
     private int size = names.length;
     private LayoutInflater inflate;
+    private MyAdapter myAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +53,15 @@ public class MyWorkActivity extends FragmentActivity {
         viewPager.setOffscreenPageLimit(2);
         IndicatorViewPager indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
         inflate = LayoutInflater.from(getApplicationContext());
-        indicatorViewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        myAdapter = new MyAdapter(getSupportFragmentManager());
+        indicatorViewPager.setAdapter(myAdapter);
 
     }
 
     public void toShare(View view) {
-        Uri imageUri = getUriToDrawable(view.getContext(), R.drawable.sunrise);
+//        Uri imageUri = getUriToDrawable(view.getContext(), R.drawable.sunrise);
+        WorkFragment workFragment = (WorkFragment) myAdapter.getCurrentFragment();
+        Uri imageUri = Uri.fromFile(new File(((FeatureImageAdapter)(workFragment.gv_featureimage.getAdapter())).getSelectedPath()));
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);

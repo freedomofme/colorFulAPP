@@ -1,10 +1,12 @@
 package com.hhxfight.recolorer.Activity.color.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.hhxfight.recolorer.R;
@@ -25,12 +27,28 @@ public class FeatureImageAdapter extends BaseAdapter
 	private ArrayList<LocalImageBean> mFeatrueData;
 	private ViewHolder mHolder;
 	private int type = 0;
+	private int selectedPos = -1; // init value for not-selected
 
 	public FeatureImageAdapter(Context context, ArrayList<LocalImageBean> data, int type)
 	{
 		mContext = context;
 		mFeatrueData = data;
 		this.type = type;
+	}
+
+	public void setSelectedPosition(int pos) {
+		selectedPos = pos;
+		// inform the view of this change
+		Log.i("Tag", pos + "!");
+		notifyDataSetChanged();
+	}
+
+	public int getSelectedPosition() {
+		return selectedPos;
+	}
+
+	public String getSelectedPath() {
+		return mFeatrueData.get(getSelectedPosition()).absPath;
 	}
 
 	@Override
@@ -67,11 +85,17 @@ public class FeatureImageAdapter extends BaseAdapter
 
 			mHolder = new ViewHolder();
 			mHolder.iv_feature = (ImageView) convertView.findViewById(R.id.iv_feature);
+			mHolder.fl_back = (FrameLayout)convertView.findViewById(R.id.fl_background);
 		
 			convertView.setTag(mHolder);
-		} else
-		{
+		} else {
 			mHolder = (ViewHolder) convertView.getTag();
+		}
+
+		if (selectedPos == position) {
+			mHolder.fl_back.setBackgroundColor(mContext.getResources().getColor(R.color.holo_blue_dark));
+		} else {
+			mHolder.fl_back.setBackgroundColor(mContext.getResources().getColor(R.color.background));
 		}
 
 		mHolder.iv_feature.setImageBitmap(mFeatrueData.get(position).bitmap);
@@ -82,5 +106,7 @@ public class FeatureImageAdapter extends BaseAdapter
 	static class ViewHolder
 	{
 		ImageView iv_feature;
+		FrameLayout fl_back;
 	}
+
 }

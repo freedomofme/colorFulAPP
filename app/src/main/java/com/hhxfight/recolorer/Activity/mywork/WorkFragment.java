@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class WorkFragment extends LazyFragment {
 	public static final String INTENT_INT_INDEX = "HHX";
 
-	private GridView gv_featureimage;
+	public GridView gv_featureimage;
 	private ArrayList<LocalImageBean> manifoldList = new ArrayList<>();
 	private ArrayList<LocalImageBean> userManifoldList = new ArrayList<>();
 	private ArrayList<LocalImageBean> grayList = new ArrayList<>();
@@ -40,12 +40,6 @@ public class WorkFragment extends LazyFragment {
 			readImages(manifoldList, 0, 150);
 
 			gv_featureimage.setAdapter(new FeatureImageAdapter(getActivity(), manifoldList, 0));
-			gv_featureimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					view.setSelected(true);
-				}
-			});
 		}
 
 		if (1 == getArguments().getInt(INTENT_INT_INDEX)) {
@@ -53,12 +47,6 @@ public class WorkFragment extends LazyFragment {
 			readImages(userManifoldList, 1, 150);
 
 			gv_featureimage.setAdapter(new FeatureImageAdapter(getActivity(), userManifoldList, 0));
-			gv_featureimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					view.setSelected(true);
-				}
-			});
 		}
 
 		if (2 == getArguments().getInt(INTENT_INT_INDEX)) {
@@ -69,14 +57,17 @@ public class WorkFragment extends LazyFragment {
 
 		if (3 == getArguments().getInt(INTENT_INT_INDEX)) {
 			colorList.clear();
-//			for (int i = 1; i <= 3; i++) {
-//				int drawable = getActivity().getResources().getIdentifier("c" + i + "",
-//						"drawable", getActivity().getPackageName());
-//				colorList.add(drawable);
-//			}
+
 			readImages(colorList, 3, 300);
 			gv_featureimage.setAdapter(new FeatureImageAdapter(getActivity(), colorList, 1));
 		}
+
+		gv_featureimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				((FeatureImageAdapter)(gv_featureimage.getAdapter())).setSelectedPosition(position);
+			}
+		});
 	}
 
 	private void readImages(ArrayList<LocalImageBean> list, int choice, int size) {

@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -125,7 +126,7 @@ public class GrayscalePresenter implements IGrayPresenter {
         ImageIoUtil.saveBitmap(Url.APPDIR + Url.GRAY + Url.USERDEF, System.currentTimeMillis() +".png", bitmap);
     }
 
-    public native String reverseImage();
+    public native String reverseImage(long nativeObjAddr, long objAddr);
 
     @Override
     public void doReverse(Bitmap bitmap) {
@@ -134,10 +135,12 @@ public class GrayscalePresenter implements IGrayPresenter {
 
         Mat result = Mat.zeros(src.size(), src.type());
 
-        Log.i("Tag", reverseImage());
+        Log.i("Tag", src.type() + "");
+
+        Log.i("Tag", reverseImage(src.getNativeObjAddr(), result.getNativeObjAddr()));
 
         Bitmap bmp = Bitmap.createBitmap(result.width(), result.height(),
-                Bitmap.Config.ARGB_8888);
+                Bitmap.Config.RGB_565);
         try {
             Utils.matToBitmap(result, bmp);
         } catch (Exception e) {
@@ -145,6 +148,9 @@ public class GrayscalePresenter implements IGrayPresenter {
             bmp.recycle();
             bmp = null;
         }
+
+        Mat test = new Mat();
+        Utils.bitmapToMat(bmp, test);
 
         iGrayView.onReversed(bmp);
     }

@@ -139,7 +139,7 @@ public class GrayscaleActivity extends BaseActivity implements IGaryView{
     @Override
     public void onReversed(Bitmap reversedBitmap) {
         if (reversedBitmap != null) {
-            iv_reverse.setImageBitmap(reversedBitmap);
+            bg.setImageBitmap(reversedBitmap);
             grayBitmapTemp = reversedBitmap;
         }
     }

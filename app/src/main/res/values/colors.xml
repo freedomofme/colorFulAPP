@@ -14,5 +14,6 @@
     <color name="white">#fafafa</color>
     <color name="unselected">#ff8cae3b</color>
     <color name="selected">#a8cf45</color>
+    <color name="holo_blue_dark">#2E88C0</color>
 
 </resources>
