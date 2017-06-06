@@ -67,7 +67,7 @@ public class ColorTransformPresenter implements IColorPresenter {
 
         multipartRequest.setRetryPolicy(new DefaultRetryPolicy(
                 15000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         MySingleton.getInstance(mContext.getApplicationContext()).getRequestQueue().add(multipartRequest);
@@ -103,11 +103,11 @@ public class ColorTransformPresenter implements IColorPresenter {
                     e.printStackTrace();
                 }
             }
-        }, new DefaultErrorListener(mContext));
+        }, new DefaultErrorListener(mContext, () -> iColorTransformView.stopAnimation()));
 
         multipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         MySingleton.getInstance(mContext.getApplicationContext()).getRequestQueue().add(multipartRequest);
@@ -124,6 +124,7 @@ public class ColorTransformPresenter implements IColorPresenter {
         params.put("image_sha1", sid);
         params.put("template_sha1", templeteSid);
 
+        iColorTransformView.startAnimation();
         JsonObjectRequest request_json = new JsonObjectRequest(Url.recolor, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -131,33 +132,37 @@ public class ColorTransformPresenter implements IColorPresenter {
                         try {
                             rid = response.getString("rid");
                             getColorTransformedImage(rid);
+
+                            // 临时
+                            iColorTransformView.stopAnimation();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
                     }
-                }, new DefaultErrorListener(mContext));
+                }, new DefaultErrorListener(mContext, () -> iColorTransformView.stopAnimation()));
 
-        request_json.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20),1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request_json.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         MySingleton.getInstance(mContext.getApplicationContext()).getRequestQueue().add(request_json);
     }
 
     @Override
     public void getColorTransformedImage(final String rid) {
-        MySingleton.getInstance(mContext.getApplicationContext()).getImageLoader().get(Url.colorImage + "/" + rid, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if (response.getBitmap() != null) {
-                    iColorTransformView.onTransformedImageGet(response);
-                }
-            }
+        ImageLoader.ImageContainer imageContainer = MySingleton.getInstance(mContext.getApplicationContext()).getImageLoader().get(Url.colorImage + "/" + rid,
+                new ImageLoader.ImageListener() {
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                        if (response.getBitmap() != null) {
+                            iColorTransformView.onTransformedImageGet(response);
+                        }
+                    }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        iColorTransformView.stopAnimation();
+                    }
+                });
     }
 
     @Override

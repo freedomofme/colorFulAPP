@@ -20,15 +20,23 @@ import com.hhxfight.recolorer.config.ErrorCode;
 
 public class DefaultErrorListener implements Response.ErrorListener {
     private Context contextHold;
+    private Runnable runnable;
 
     public DefaultErrorListener(Context context) {
         contextHold = context;
     }
 
+    public DefaultErrorListener(Context context, Runnable runnable) {
+        contextHold = context;
+        this.runnable = runnable;
+    }
+
     @Override
     public void onErrorResponse(VolleyError error) {
         error.printStackTrace();
-        Log.d("RVA", "error:" + error);
+        Log.d("Tag", "error:" + error);
+        if (runnable != null)
+            runnable.run();
 
         int errorCode = 0;
         if (error instanceof TimeoutError) {

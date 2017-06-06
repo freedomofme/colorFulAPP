@@ -59,35 +59,41 @@
             android:layout_weight="1" />
 
 
-
         <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/rv_color"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="140dp"-->
-            <!--android:scrollbars="horizontal" />-->
+        <!--android:id="@+id/rv_color"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="140dp"-->
+        <!--android:scrollbars="horizontal" />-->
         <RelativeLayout
             android:id="@+id/rl_option"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            >
+            android:layout_height="140dp">
+
             <com.shizhefei.view.indicator.ScrollIndicatorView
                 android:id="@+id/siv_features"
-                android:background="#fefefe"
                 android:layout_width="match_parent"
-                android:layout_height="45dp" />
+                android:layout_height="45dp"
+                android:background="#fefefe" />
 
             <android.support.v4.view.ViewPager
-                android:layout_below="@id/siv_features"
                 android:id="@+id/vp_features"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:layout_below="@id/siv_features" />
         </RelativeLayout>
     </LinearLayout>
 
-    <com.victor.loading.book.BookLoading
-        android:id="@+id/bl_bookloading"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true" />
+    <FrameLayout
+        android:id="@+id/fl_bookloading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" >
+
+        <com.victor.loading.book.BookLoading
+            android:id="@+id/bl_bookloading"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            />
+    </FrameLayout>
 </RelativeLayout>

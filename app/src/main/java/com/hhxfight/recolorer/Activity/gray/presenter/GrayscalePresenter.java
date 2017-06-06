@@ -99,7 +99,7 @@ public class GrayscalePresenter implements IGrayPresenter {
                     }
         }, new DefaultErrorListener(mContext));
 
-        request_json.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20),1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request_json.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         MySingleton.getInstance(mContext.getApplicationContext()).getRequestQueue().add(request_json);
     }

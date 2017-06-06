@@ -9,4 +9,6 @@ import com.android.volley.toolbox.ImageLoader;
 public interface IColorTransformView {
     void onImagePosted(String path);
     void onTransformedImageGet(ImageLoader.ImageContainer imageContainer);
+    void startAnimation();
+    void stopAnimation();
 }

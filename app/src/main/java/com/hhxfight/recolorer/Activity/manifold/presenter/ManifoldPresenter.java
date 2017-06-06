@@ -61,8 +61,8 @@ public class ManifoldPresenter implements IManifoldPresenter {
         }, new DefaultErrorListener(mContext));
 
         multipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         MySingleton.getInstance(mContext.getApplicationContext()).getRequestQueue().add(multipartRequest);

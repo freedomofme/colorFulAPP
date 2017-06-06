@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
 
     PinchImageView bg;
     RecyclerView recyclerView;
+    FrameLayout fl_bookLoading;
     BookLoading bookLoading;
     IColorPresenter iColorPresenter;
     Bitmap colorBitmapTemp;
@@ -74,7 +76,12 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
 
 //        Bitmap bitmap = AssetsUtil.getBitmap(this, "greenAni.png");
 //        bg.setImageBitmap(bitmap);
+        fl_bookLoading = (FrameLayout) findViewById(R.id.fl_bookloading);
         bookLoading = (BookLoading) findViewById(R.id.bl_bookloading);
+        fl_bookLoading.setVisibility(View.GONE);
+        fl_bookLoading.setOnClickListener((view)->{
+//            Toast.makeText(this, "@@@@@@@", Toast.LENGTH_SHORT).show();
+        });
         bookLoading.setVisibility(View.GONE);
 
 
@@ -127,14 +134,16 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
 
     private void stopLoading() {
         bookLoading.stop();
-        bookLoading.setVisibility(View.INVISIBLE);
+        bookLoading.setVisibility(View.GONE);
+        fl_bookLoading.setVisibility(View.GONE);
         bg.setVisibility(View.VISIBLE);
     }
 
     private void startLoading() {
         bookLoading.start();
-        bg.setVisibility(View.INVISIBLE);
         bookLoading.setVisibility(View.VISIBLE);
+        fl_bookLoading.setVisibility(View.VISIBLE);
+        bg.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -151,6 +160,16 @@ public class ColorTransformActivity extends FragmentActivity implements IColorTr
         Toast.makeText(this, "图片色彩转移完成", Toast.LENGTH_SHORT).show();
         colorBitmapTemp = imageContainer.getBitmap();
         bg.setImageBitmap(colorBitmapTemp);
+        stopLoading();
+    }
+
+    @Override
+    public void startAnimation() {
+        startLoading();
+    }
+
+    @Override
+    public void stopAnimation() {
         stopLoading();
     }
 
