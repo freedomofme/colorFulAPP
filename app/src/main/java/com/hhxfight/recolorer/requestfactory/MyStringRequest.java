@@ -50,6 +50,8 @@ public class MyStringRequest extends StringRequest {
     @Override
     public String getCacheKey() {
         String temp = super.getCacheKey();
+        if (mParams == null)
+            return temp;
         for (Map.Entry<String, String> entry : mParams.entrySet())
             temp += entry.getKey() + "=" + entry.getValue();
         return temp;

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hhxfight.recolorer.Activity.color.view.FeatureImageAdapter;
 import com.hhxfight.recolorer.Activity.color.view.GridFeatureImageFragment;
@@ -61,7 +62,12 @@ public class MyWorkActivity extends FragmentActivity {
     public void toShare(View view) {
 //        Uri imageUri = getUriToDrawable(view.getContext(), R.drawable.sunrise);
         WorkFragment workFragment = (WorkFragment) myAdapter.getCurrentFragment();
-        Uri imageUri = Uri.fromFile(new File(((FeatureImageAdapter)(workFragment.gv_featureimage.getAdapter())).getSelectedPath()));
+        String selectedPath = ((FeatureImageAdapter)(workFragment.gv_featureimage.getAdapter())).getSelectedPath();
+        if (selectedPath == null || selectedPath.equals("")) {
+            Toast.makeText(this, "请先选择需要分享的作品!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Uri imageUri = Uri.fromFile(new File(selectedPath));
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);

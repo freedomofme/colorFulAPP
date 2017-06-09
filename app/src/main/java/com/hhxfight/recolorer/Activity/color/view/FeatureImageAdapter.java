@@ -48,6 +48,8 @@ public class FeatureImageAdapter extends BaseAdapter
 	}
 
 	public String getSelectedPath() {
+		if (getSelectedPosition() < 0)
+			return null;
 		return mFeatrueData.get(getSelectedPosition()).absPath;
 	}
 
