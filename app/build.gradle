@@ -22,8 +22,25 @@ android {
     }
     buildTypes {
         release {
+            // 混淆
             minifyEnabled false
+            // Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources false
+            // 前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为appname-1.0-beta1-xxxx-xx-xx.apk
+                        def fileName = "app-${defaultConfig.versionName}-beta1-${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
     }
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
@@ -63,6 +80,9 @@ dependencies {
     compile project(path: ':pinchimageview')
 }
 
+def releaseTime() {
+    return new Date().format("yyyy.MM.dd", TimeZone.getTimeZone("UTC"))
+}
 
 def getNdkDir() {
     if (System.env.ANDROID_NDK_ROOT != null)

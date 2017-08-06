@@ -59,6 +59,10 @@ public class MyWorkActivity extends FragmentActivity {
 
     }
 
+    public void toBack(View v) {
+        finish();
+    }
+
     public void toShare(View view) {
 //        Uri imageUri = getUriToDrawable(view.getContext(), R.drawable.sunrise);
         WorkFragment workFragment = (WorkFragment) myAdapter.getCurrentFragment();
